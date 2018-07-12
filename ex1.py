@@ -3,20 +3,19 @@ import os
 from sqlalchemy import String, Column, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 db_dir =  'sqlite:///' + os.path.join(BASE_DIR, 'company1.db')
+engine = create_engine(db_dir, echo=True)
 
-engine = create_engine(db_dir, echo=False)
+Base = declarative_base()
 
 Session = sessionmaker(bind=engine)
 session = Session()
-Base = declarative_base()
 
-    
+
 class Employee(Base):
     
     __tablename__ = 'employee'
@@ -39,6 +38,8 @@ class Employee(Base):
 #print Employee.__table__
 Base.metadata.create_all(engine)
 
+akeem = Employee(first_name="Akeem", last_name="Joffer", gender="Male")
+session.add(akeem)
 
 session.add_all([Employee("Joe", "Smith", "Male"),
                  Employee("Jill", "Williams", "Female"),
